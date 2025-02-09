@@ -85,7 +85,7 @@ std::string GetProcessName(DWORD dwProcessId) {
 #define CMDLINE_USAGE_HEADER                                                                                           \
     "basez - BaseX 命令行编解码工具 - v1.0.3\n"                                                                        \
     "对 RFC4648 的简单实现 (https://www.rfc-editor.org/rfc/rfc4648)\n"                                                 \
-    "gh源码地址: zby-c/basez"                                                                                          \
+    "gh源码地址: zby-c/basez\n"                                                                                          \
     "Copyright (c) 2025 Zou Boyu [sharkzby@outlook.com]\n"                                                             \
     "基于 MIT License 分发 (https://opensource.org/license/MIT)\n"                                                     \
     "使用 Hideyuki Tanaka 的 cmdline 库处理命令行参数\n"                                                               \
@@ -268,8 +268,8 @@ public:
     parser.add<std::string>("alphabet", 'E', "自定义字母表(当编码为base32, base64时可用)", false, "");
     parser.add("file", 'f', "文件标志(则最后一个参数将视为文件名, 否则为数据)");
 #ifdef WIN32 // 还是防呆 肯定有人乱码不chcp
-    parser.add("gbk", '\0', "解码使用GBK代码页(老Windows文件默认GBK, 如果解码中文乱码可尝试)");
-    parser.add("utf-8", '\0', "解码UTF-8代码页(现Windows文件默认UTF-8, 如果解码中文乱码优先尝试)");
+    parser.add("gbk", '\0', "使用GBK代码页(老Windows文件默认GBK, 如果解码中文乱码可尝试)");
+    parser.add("utf-8", '\0', "UTF-8代码页(现Windows文件默认UTF-8, 如果解码中文乱码优先尝试)");
 #endif
 
     parser.parse_check(argc, argv);
