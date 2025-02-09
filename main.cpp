@@ -20,7 +20,6 @@
  */
 
 /*
- * Version 1.0.1
  * 用法示例
  * 1: 将`hello`转为 Base 64 编码
  *     $ ./basez -e base64 "hello"
@@ -84,7 +83,7 @@ std::string GetProcessName(DWORD dwProcessId) {
 #endif
 
 #define CMDLINE_USAGE_HEADER                                                                                           \
-    "basez - BaseX 命令行编解码工具 - v1.0.1\n"                                                                        \
+    "basez - BaseX 命令行编解码工具 - v1.0.3\n"                                                                        \
     "对 RFC4648 的简单实现 (https://www.rfc-editor.org/rfc/rfc4648)\n"                                                 \
     "gh源码地址: zby-c/basez"                                                                                          \
     "Copyright (c) 2025 Zou Boyu [sharkzby@outlook.com]\n"                                                             \
@@ -252,6 +251,7 @@ public:
                 std::string arg;
                 getline(std::cin, arg);
                 std::system((argv[0] + std::string(" ") + arg).c_str());
+                std::println("");
             }
         }
     }
