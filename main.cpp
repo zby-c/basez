@@ -95,7 +95,7 @@ std::string GetProcessName(DWORD dwProcessId) {
 
 /**
  * @class RFC4648
- * @brief 一个静态类, RFC4648 的部分简单实现 (Base 16, Base 32, Base 64)
+ * @brief 一个静态函数类, RFC4648 的部分简单实现 (Base 16, Base 32, Base 64)
  * @note 详见 https://www.rfc-editor.org/rfc/rfc4648
  */
 class RFC4648 {
