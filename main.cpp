@@ -89,6 +89,7 @@ std::string GetProcessName(DWORD dwProcessId) {
     "gh源码地址: zby-c/basez"                                                                                          \
     "Copyright (c) 2025 Zou Boyu [sharkzby@outlook.com]\n"                                                             \
     "基于 MIT License 分发 (https://opensource.org/license/MIT)\n"                                                     \
+    "使用 Hideyuki Tanaka 的 cmdline 库处理命令行参数\n"                                                               \
     "------------------------------------------------------------\n"
 
 #include "cmdline.h"
