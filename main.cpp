@@ -71,7 +71,7 @@ std::string GetProcessName(const DWORD dwProcessId) {
 #endif
 
 #define CMDLINE_USAGE_HEADER                                                                                           \
-    "basez - BaseX 命令行编解码工具 - v1.1.0\n"                                                                        \
+    "basez - BaseX 命令行编解码工具 - v1.1.1\n"                                                                        \
     "对 RFC4648 的简单实现 (https://www.rfc-editor.org/rfc/rfc4648)\n"                                                 \
     "gh源码地址: zby-c/basez\n"                                                                                        \
     "Copyright (c) 2025 Zou Boyu [sharkzby@outlook.com]\n"                                                             \
@@ -233,6 +233,8 @@ public:
         // 狠狠吐槽 不会真的有人直接双击打开吧
         if (std::string parentProcessName = GetProcessName(dwParentProcessId); parentProcessName == "explorer.exe") {
             std::println(std::cerr, "ERROR: 不要资源管理器里直接打开, 请使用启动脚本或在shell中启动");
+            std::this_thread::sleep_for(std::chrono::seconds(5));
+            return -1;
         }
     }
 #endif
