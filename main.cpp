@@ -1,5 +1,5 @@
 /**
- * @brief basez - 一个 BaseX 系列命令行编解码工具
+ * @brief basez - 一个 RFC4648 (BaseX) 命令行编解码工具
  * @author Zou Boyu
  * @copyright 2025 Zou Boyu (under MIT License)
  *
@@ -21,13 +21,13 @@
 
 /*
  * 用法示例
- * 1: 将`hello`转为 Base 64 编码
+ * 1: 将`hello`转为 Base64 编码
  *     $ ./basez -e base64 "hello"
  * 2: 将 Base 64 编码 `aGVsbG8sIHdvcmxkIQ==` 解码
  *     $ ./basez -e base64 -t 1 aGVsbG8sIHdvcmxkIQ==
- * 3: 将文件`test_file`转换为 Base 32 编码 并把结果重定向到文件`test_file_out`
+ * 3: 将文件`test_file`转换为 Base32 编码 并把结果重定向到文件`test_file_out`
  *     $ ./basez -e base32 -f test_file > test_file_out
- * 4: 用自定义字母表的 Base 64 对`test`编码
+ * 4: 用自定义字母表的 Base64 对`test`编码
  *     $ ./basez -e base64 -E [自定义字母表64] test
  */
 
@@ -41,7 +41,7 @@
 #include <Windows.h>
 #include <tlhelp32.h>
 
-DWORD GetParentProcessId(DWORD dwProcessId) {
+DWORD GetParentProcessId(const DWORD dwProcessId) {
     DWORD dwParentProcessId = 0;
     HANDLE hSnapshot = CreateToolhelp32Snapshot(TH32CS_SNAPPROCESS, 0);
     if (hSnapshot != INVALID_HANDLE_VALUE) {
@@ -61,7 +61,7 @@ DWORD GetParentProcessId(DWORD dwProcessId) {
 }
 
 // 获取进程名称
-std::string GetProcessName(DWORD dwProcessId) {
+std::string GetProcessName(const DWORD dwProcessId) {
     std::string processName;
     HANDLE hSnapshot = CreateToolhelp32Snapshot(TH32CS_SNAPPROCESS, 0);
     if (hSnapshot != INVALID_HANDLE_VALUE) {
@@ -83,12 +83,12 @@ std::string GetProcessName(DWORD dwProcessId) {
 #endif
 
 #define CMDLINE_USAGE_HEADER                                                                                           \
-    "basez - BaseX 命令行编解码工具 - v1.0.3\n"                                                                        \
+    "basez - BaseX 命令行编解码工具 - v1.1.0\n"                                                                        \
     "对 RFC4648 的简单实现 (https://www.rfc-editor.org/rfc/rfc4648)\n"                                                 \
-    "gh源码地址: zby-c/basez\n"                                                                                          \
+    "gh源码地址: zby-c/basez\n"                                                                                        \
     "Copyright (c) 2025 Zou Boyu [sharkzby@outlook.com]\n"                                                             \
     "基于 MIT License 分发 (https://opensource.org/license/MIT)\n"                                                     \
-    "使用 Hideyuki Tanaka 的 cmdline 库处理命令行参数\n"                                                               \
+    "使用 cmdline 库处理命令行参数\n"                                                                                  \
     "------------------------------------------------------------\n"
 
 #include "cmdline.h"
@@ -244,15 +244,7 @@ public:
         DWORD dwParentProcessId = GetParentProcessId(dwCurrentProcessId);
         // 狠狠吐槽 不会真的有人直接双击打开吧
         if (std::string parentProcessName = GetProcessName(dwParentProcessId); parentProcessName == "explorer.exe") {
-            std::println(
-                    std::clog,
-                    "LOG: 检测到explorer直接运行 启用交互式防呆设计 请在这里输入参数(Enter结束) (--help 查看帮助)");
-            while (true) {
-                std::string arg;
-                getline(std::cin, arg);
-                std::system((argv[0] + std::string(" ") + arg).c_str());
-                std::println("");
-            }
+            std::println(std::cerr, "ERROR: 不要资源管理器里直接打开, 请使用启动脚本或在shell中启动");
         }
     }
 #endif
@@ -267,10 +259,6 @@ public:
     parser.add<int>("type", 't', "编码(0)/解码(1)", false, 0, cmdline::range(0, 1));
     parser.add<std::string>("alphabet", 'E', "自定义字母表(当编码为base32, base64时可用)", false, "");
     parser.add("file", 'f', "文件标志(则最后一个参数将视为文件名, 否则为数据)");
-#ifdef WIN32 // 还是防呆 肯定有人乱码不chcp
-    parser.add("gbk", '\0', "使用GBK代码页(老Windows文件默认GBK, 如果解码中文乱码可尝试)");
-    parser.add("utf-8", '\0', "UTF-8代码页(现Windows文件默认UTF-8, 如果解码中文乱码优先尝试)");
-#endif
 
     parser.parse_check(argc, argv);
 
@@ -279,13 +267,6 @@ public:
     auto alphabet = parser.get<std::string>("alphabet");
     std::string data = argv[argc - 1];
 
-#ifdef WIN32
-    if (parser.exist("gbk")) {
-        std::system("chcp 936 > NUL");
-    } else if (parser.exist("utf-8")) {
-        std::system("chcp 65001 > NUL");
-    }
-#endif
     if (parser.exist("file")) { // 获取文件内容为 data
         std::ifstream file(data.c_str());
         std::istreambuf_iterator<char> beg(file), end;

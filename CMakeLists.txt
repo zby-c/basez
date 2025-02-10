@@ -11,3 +11,16 @@ add_compile_options("$<$<CXX_COMPILER_ID:MSVC>:/source-charset:utf-8>")
 add_compile_options("$<$<CXX_COMPILER_ID:MSVC>:/MT>")
 
 add_executable(basez main.cpp)
+
+install(TARGETS basez DESTINATION .)
+
+install(FILES 
+    ${CMAKE_SOURCE_DIR}/README.md 
+    ${CMAKE_SOURCE_DIR}/LICENSE 
+    DESTINATION .
+)
+
+install(DIRECTORY 
+    ${CMAKE_SOURCE_DIR}/script 
+    DESTINATION .
+)
