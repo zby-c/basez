@@ -19,18 +19,6 @@
  * @note 对C++一知半解, 随手写的玩具罢了
  */
 
-/*
- * 用法示例
- * 1: 将`hello`转为 Base64 编码
- *     $ ./basez -e base64 "hello"
- * 2: 将 Base 64 编码 `aGVsbG8sIHdvcmxkIQ==` 解码
- *     $ ./basez -e base64 -t 1 aGVsbG8sIHdvcmxkIQ==
- * 3: 将文件`test_file`转换为 Base32 编码 并把结果重定向到文件`test_file_out`
- *     $ ./basez -e base32 -f test_file > test_file_out
- * 4: 用自定义字母表的 Base64 对`test`编码
- *     $ ./basez -e base64 -E [自定义字母表64] test
- */
-
 #include <chrono>
 #include <fstream>
 #include <print>
