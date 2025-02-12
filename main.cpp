@@ -19,7 +19,6 @@
  * @note 对C++一知半解, 随手写的玩具罢了
  */
 
-#include <chrono>
 #include <fstream>
 #include <print>
 #include <stdexcept>
